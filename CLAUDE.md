@@ -14,7 +14,7 @@ ekskluderinger. Dette repoet inneholder ingen prisregel og leser hverken innkjø
 eller margin. Ingen Supabase nøkkel her, kun den delte hemmeligheten `PRICE_SYNC_SECRET`
 i header `x-price-sync-secret`.
 
-Søsterrepo: [shop-impero-supplier-sync](https://github.com/Pasture-x-Impero/shop-impero-supplier-sync)
+Søsterrepo: [shop-impero-supplier-sync](https://github.com/impero-no/shop-impero-supplier-sync)
 (innkjøpspriser og lager fra distributører, Icecat berikelse). `power.ts`, `komplett.ts`
 og `dustin.ts` finnes i begge repoene: her for prisinnsamling, der for navn/bilde
 fallback. Endringer i dem må gjøres begge steder.
