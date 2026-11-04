@@ -8,7 +8,7 @@ kun den delte hemmeligheten `PRICE_SYNC_SECRET`.
 
 Leverandør synken (innkjøpspriser og lager fra TD Synnex/ALSO/isicom, Icecat berikelse)
 ligger i søsterrepoet
-[shop-impero-supplier-sync](https://github.com/Pasture-x-Impero/shop-impero-supplier-sync).
+[shop-impero-supplier-sync](https://github.com/impero-no/shop-impero-supplier-sync).
 Se `CLAUDE.md` for arkitektur, kontrakter og tekniske lærdommer.
 
 ## Arkitektur
@@ -29,7 +29,7 @@ Alt som sendes til `price-sync-competitor` er **ekskl. mva.**, for alle kilder.
 ## Oppsett
 
 ```bash
-git clone https://github.com/Pasture-x-Impero/shop-impero-market-pricing.git
+git clone https://github.com/impero-no/shop-impero-market-pricing.git
 cd shop-impero-market-pricing
 npm install
 ```
