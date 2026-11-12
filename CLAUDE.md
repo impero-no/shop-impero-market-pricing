@@ -48,8 +48,20 @@ Lovable ganger med 1,25 universelt. Bakgrunn: en kildespesifikk mva gjetting på
 siden dobbeltkonverterte tidligere Dustin priser, siden Dustin fetcheren allerede
 konverterte. Aldri gjeninnfør per kilde logikk på noen av sidene.
 
-**Skjemaet eies av Lovable.** Trengs en endring i Edge Functions eller tabeller, be
-Lovable agenten for `impero-shop`. Aldri SQL direkte.
+**Skjemaet ligger i `impero-shop`.** **Send aldri meldinger til Lovable agenten**
+(`send_message` eller lignende). Endringer gjøres direkte:
+
+- **Database (funksjoner, tabeller, data):** kjør SQL med Lovable MCP sin
+  `query_database`, og legg den samme SQL en som migrasjonsfil i
+  `impero-shop/supabase/migrations/` (PR mot `main`). Uten migrasjonsfilen kan endringen
+  bli overskrevet neste gang Lovable endrer samme funksjon. Sjekk alltid gjeldende
+  definisjon med `pg_get_functiondef` før `CREATE OR REPLACE`, og verifiser etterpå.
+- **Kode og Edge Functions:** endre i `impero-shop` repoet (PR mot `main`), og bruk
+  `deploy_project` for å publisere.
+
+**Utsalgsprisen** regnes i `compute_competitor_pricing`. Konkurrentrader eldre enn
+7 dager (`checked_at`) brukes ikke, slik at et produkt som falt ut av en kjøring ikke
+prises på gamle tall. Radene blir liggende for visning i admin.
 
 ## Kildenotater
 
