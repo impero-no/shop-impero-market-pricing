@@ -39,7 +39,7 @@ fallback. Endringer i dem må gjøres begge steder.
 
 | Funksjon | Retning | Innhold |
 |---|---|---|
-| `price-sync-visible-products` | les | `{ products: [...], ... }`, ikke en bar array. Per produkt brukes `id`, `name`, `ean`, `mpn`, `excluded_sources: string[]`. Andre felt i responsen ignoreres. |
+| `price-sync-visible-products` | les | `{ products: [...], ... }`, ikke en bar array. Per produkt brukes `id`, `name`, `ean`, `mpn`, `producer` og `excluded_sources: string[]`. Andre felt i responsen ignoreres. |
 | `price-sync-competitor` | skriv | Én POST med alle produkter. Per element kun `product_id` og `competitor_prices[]` (`source`, `competitor_name`, `price_ex_vat`, `available`, `product_url`, `source_sku`, `excluded`). Lovable lagrer radene med RPC i chunker, aldri per produkt, og regner så utsalgspris selv. Svar: `{ updated, errors, competitor_rows }`. |
 | `price-sync-run-log` | skriv | Per kilde: sjekket/treff/tilgjengelig. Hoppes over i `only` modus. |
 
@@ -78,7 +78,8 @@ prises på gamle tall. Radene blir liggende for visning i admin.
   (`valueAddedTaxIncluded`), koden avviser resultatet hvis feltet noen gang er `true`.
   Eksakt MPN søk redirecter ved treff. Cloudflare stopper ikke `fetch()`.
 - **Eplehuset** — kun MPN, ingen EAN i offentlig feed. ~2400 varianter hentes én gang
-  per kjøring.
+  per kjøring. Bare produkter med produsent Apple sjekkes (og telles som sjekket).
+  Mangler `producer` i responsen, sjekkes alle som før.
 - **Elkjøp** — søk er klient rendret, krever Playwright. Fra GitHub Actions IP er gir
   siden aldri ekte innhold (0 treff, ~18 s per oppslag, matcher selector timeout).
   Stealth tiltak i `browser-fetch.ts` hjalp ikke. Parkert for å unngå at gjentatte
