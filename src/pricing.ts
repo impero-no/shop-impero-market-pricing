@@ -61,6 +61,9 @@ interface VisibleProduct {
   name: string;
   ean: string;
   mpn: string | null;
+  // Produsentnavn. Valgfritt for bakoverkompatibilitet: mangler feltet, sjekkes
+  // Eplehuset for alle produkter som før.
+  producer?: string | null;
   // Kilder admin har ekskludert for dette produktet. Valgfritt for
   // bakoverkompatibilitet — mangler feltet, er ingenting ekskludert.
   excluded_sources?: string[];
@@ -184,6 +187,11 @@ function recordResult(source: (typeof SOURCES)[number], startedAt: number, resul
   }
 }
 
+function isEplehusetCandidate(product: VisibleProduct): boolean {
+  if (product.producer === undefined) return true; // eldre respons uten produsent
+  return product.producer?.trim().toLowerCase() === 'apple';
+}
+
 // Eplehuset har ingen per-produkt-oppslag — henter hele deres Apple-utvalg
 // ÉN gang og slår opp lokalt per MPN i stedet for ett nettverkskall per
 // produkt.
@@ -224,10 +232,14 @@ for (let i = 0; i < products.length; i++) {
     recordResult('dustin', t, dustin);
     if (dustin) results.push(dustin);
 
-    t = Date.now();
-    const eplehuset = eplehusetByMpn.get(product.mpn.toLowerCase()) ?? null;
-    recordResult('eplehuset', t, eplehuset);
-    if (eplehuset) results.push(eplehuset);
+    // Eplehuset fører bare Apple. Andre produsenter telles ikke som sjekket,
+    // slik at dekningen i admin speiler Apple-sortimentet.
+    if (isEplehusetCandidate(product)) {
+      t = Date.now();
+      const eplehuset = eplehusetByMpn.get(product.mpn.toLowerCase()) ?? null;
+      recordResult('eplehuset', t, eplehuset);
+      if (eplehuset) results.push(eplehuset);
+    }
   }
 
   const excluded = new Set((product.excluded_sources ?? []).map(s => s.toLowerCase()));
